@@ -1,0 +1,37 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "fish_entries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "fishType",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "fish_entries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "fishType",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "state",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

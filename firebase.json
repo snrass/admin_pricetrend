@@ -1,1 +1,2 @@
-{"flutter":{"platforms":{"dart":{"lib/firebase_options.dart":{"projectId":"admin-pricetrend","configurations":{"web":"1:95600745380:web:c775cf768aa3fee9d0bf31"}}}}}}
+{"flutter":{"platforms":{"dart":{"lib/firebase_options.dart":{"projectId":"admin-pricetrend","configurations":{"web":"1:95600745380:web:c775cf768aa3fee9d0bf31"}}}}},"firestore":{"rules":"firestore.rules","indexes":"firestore.indexes.json"}}
+
