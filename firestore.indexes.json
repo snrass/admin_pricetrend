@@ -1,34 +1,20 @@
 {
   "indexes": [
     {
-      "collectionGroup": "fish_entries",
+      "collectionGroup": "price_entries",
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "fishType",
+          "fieldPath": "speciesType",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "speciesName",
           "order": "ASCENDING"
         },
         {
           "fieldPath": "createdAt",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "fish_entries",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "fishType",
           "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "state",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "createdAt",
-          "order": "DESCENDING"
         }
       ]
     }

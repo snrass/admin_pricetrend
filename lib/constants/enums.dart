@@ -43,3 +43,19 @@ enum TimeFilter {
   final String label;
   const TimeFilter(this.label);
 }
+
+enum ParentFishType {
+  live('Live'),
+  chilled('Chilled');
+
+  final String label;
+  const ParentFishType(this.label);
+}
+
+enum UsedForType {
+  purchase('Purchase'),
+  sell('Sell');
+
+  final String label;
+  const UsedForType(this.label);
+}

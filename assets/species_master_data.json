@@ -1,0 +1,350 @@
+{
+  "FRESH WATER": [
+    {
+      "Common Name": "Rohu",
+      "Scientific Name": "Labeo rohita",
+      "Size/Gradec": [
+        {"size": "1KG UP", "price": null}
+      ],
+      "Availability": "Around the year"
+    },
+    {
+      "Common Name": "KATLA",
+      "Scientific Name": "Catla catla",
+      "Size/Gradec": [
+        {"size": "1 KG UP", "price": null}
+      ],
+      "Availability": "Around the year"
+    },
+    {
+      "Common Name": "AAR",
+      "Scientific Name": "Arius thalassinus",
+      "Size/Gradec": [
+        {"size": "2 KG UP", "price": null}
+      ],
+      "Availability": "Around the year"
+    },
+    {
+      "Common Name": "VETKI (Seabas)",
+      "Scientific Name": "Lates calcarifer",
+      "Size/Gradec": [
+        {"size": "500 GM UP", "price": null}
+      ],
+      "Availability": "Around the year"
+    },
+    {
+      "Common Name": "VETKI (Seabas)",
+      "Scientific Name": "Lates calcarifer",
+      "Size/Gradec": [
+        {"size": "700 GM UP", "price": null}
+      ],
+      "Availability": "Around the year"
+    },
+    {
+      "Common Name": "BASA",
+      "Scientific Name": "Pangasius sp",
+      "Size/Gradec": [
+        {"size": "1 KG UP", "price": null}
+      ],
+      "Availability": "Around the year"
+    },
+    {
+      "Common Name": "TILAPIA",
+      "Scientific Name": "Oreochromis mossambica",
+      "Size/Gradec": [
+        {"size": "100 GM UP", "price": null}
+      ],
+      "Availability": "Around the year"
+    }
+  ],
+  "SEA CAUGHT": [
+    {
+      "Common Name": "SILVER POMFRET",
+      "Scientific Name": "Pampus argenteus",
+      "Size/Gradec": [
+        {"size": "100 gm up", "price": null},
+        {"size": "200 gm up", "price": null},
+        {"size": "300 gm up", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "CHINESE POMFRET",
+      "Scientific Name": "Pampus chinensis",
+      "Size/Gradec": [
+        {"size": "500 gm up", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "BLACK POMFRET",
+      "Scientific Name": "Parastromateus niger",
+      "Size/Gradec": [
+        {"size": "500 gm up", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "MACKEREL",
+      "Scientific Name": "Rastrelliger kanagurta",
+      "Size/Gradec": [
+        {"size": "1 kg up", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "REEF COD",
+      "Scientific Name": "epinephalus malabaricus",
+      "Size/Gradec": [
+        {"size": "3 KG UP", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "BLACK SNAPPER",
+      "Scientific Name": "Lutjanus spp",
+      "Size/Gradec": [
+        {"size": "1 kg up", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "RED SNAPPER",
+      "Scientific Name": "Lutjanus spp",
+      "Size/Gradec": [
+        {"size": "3 kg up", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "WHITE SNAPPER",
+      "Scientific Name": "Lutjanus spp",
+      "Size/Gradec": [
+        {"size": "1 kg up", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "CROAKER",
+      "Scientific Name": "Johnius dussumieri",
+      "Size/Gradec": [
+        {"size": "500 gm up", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "KING FISH",
+      "Scientific Name": "Scomberomorus guttatus",
+      "Size/Gradec": [
+        {"size": "1 kg up", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "3 SPOT CRAB",
+      "Scientific Name": "portunus sanguinolentus",
+      "Size/Gradec": [
+        {"size": "150 gm up", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "BLUE SWIMMING CRAB",
+      "Scientific Name": "Portunus pelagicus",
+      "Size/Gradec": [
+        {"size": "150 gm up", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "SOLE",
+      "Scientific Name": "Solea solea",
+      "Size/Gradec": [
+        {"size": "100 gm up", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "SCAMPI",
+      "Scientific Name": "SCAMPI",
+      "Size/Gradec": [
+        {"size": "U2-500 GRAMS UP", "price": null},
+        {"size": "U3-330 GRAMS UP", "price": null},
+        {"size": "U4-250 GRAMS UP", "price": null},
+        {"size": "U5-200 GRAMS UP", "price": null},
+        {"size": "U6/7-150 GRAMS UP", "price": null},
+        {"size": "U8/10-100 GRAMS UP", "price": null},
+        {"size": "U10/12-80 GRAMS UP", "price": null}
+      ],
+      "Availability": "SEASONAL FROM OCT-MARCH"
+    },
+    {
+      "Common Name": "CORAL TROUT",
+      "Scientific Name": "CORAL TROUT",
+      "Size/Gradec": [
+        {"size": "300 GMS- 5 KGS", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "LEOPARD CORAL GROUPER",
+      "Scientific Name": "LEOPARD CORAL GROUPER",
+      "Size/Gradec": [
+        {"size": "300GMS- 5 KGS", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "BROWN MARBLED GROUPER OR TIGER GROUPER",
+      "Scientific Name": "BROWN MARBLED GROUPER OR TIGER GROUPER",
+      "Size/Gradec": [
+        {"size": "2-10 KGS", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "RED SPOTTED GROUPER",
+      "Scientific Name": "RED SPOTTED GROUPER",
+      "Size/Gradec": [
+        {"size": "2-15KGS", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "BROWN SPOTTED GROUPER",
+      "Scientific Name": "BROWN SPOTTED GROUPER",
+      "Size/Gradec": [
+        {"size": "2-15 KGS", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "BLACK SPOTTED GROUPER",
+      "Scientific Name": "BLACK SPOTTED GROUPER",
+      "Size/Gradec": [
+        {"size": "2-20 KGS", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "AEROLATE GROUPER",
+      "Scientific Name": "AEROLATE GROUPER",
+      "Size/Gradec": [
+        {"size": "300GMS - 1 KG", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "TOMATO BANDED GROUPER",
+      "Scientific Name": "TOMATO BANDED GROUPER",
+      "Size/Gradec": [
+        {"size": "300GMS- 2 KG", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "YELLOW EDGED LYRETAIL MOON TAIL SEABASS",
+      "Scientific Name": "YELLOW EDGED LYRETAIL MOON TAIL SEABASS",
+      "Size/Gradec": [
+        {"size": "300 GMS-2KG", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "YELLOW  EDGED LYRETAIL MOONTAIL SEABASS",
+      "Scientific Name": "YELLOW  EDGED LYRETAIL MOONTAIL SEABASS",
+      "Size/Gradec": [
+        {"size": "300 GMS- 2 KG", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "THORNY CHEEK GROUPER",
+      "Scientific Name": "THORNY CHEEK GROUPER",
+      "Size/Gradec": [
+        {"size": "1-5 KGS", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "SPINEY CHEEK GROUPER OR PLAIN GROUPER",
+      "Scientific Name": "SPINEY CHEEK GROUPER OR PLAIN GROUPER",
+      "Size/Gradec": [
+        {"size": "1-5 KGS", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "MANGROVE RED SNAPPER",
+      "Scientific Name": "MANGROVE RED SNAPPER",
+      "Size/Gradec": [
+        {"size": "2-7 KGS", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "RED SNAPPER",
+      "Scientific Name": "RED SNAPPER",
+      "Size/Gradec": [
+        {"size": "500 GM- 3 KG", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "RED EMPEROR SNAPPER",
+      "Scientific Name": "RED EMPEROR SNAPPER",
+      "Size/Gradec": [
+        {"size": "500GM-3 KG", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "WHITE SNAPPER",
+      "Scientific Name": "WHITE SNAPPER",
+      "Size/Gradec": [
+        {"size": "500GM -3 KG", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "RED SPOTTED EMPEROR SNAPPER",
+      "Scientific Name": "RED SPOTTED EMPEROR SNAPPER",
+      "Size/Gradec": [
+        {"size": "500 GM -3 KG", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "PINJALO RED SNAPPER",
+      "Scientific Name": "PINJALO RED SNAPPER",
+      "Size/Gradec": [
+        {"size": "500GM-2KG", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "INDIAN MACKEL",
+      "Scientific Name": "INDIAN MACKEL",
+      "Size/Gradec": [
+        {"size": "5-15 Pcs/KG", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "KING FISH",
+      "Scientific Name": "KING FISH",
+      "Size/Gradec": [
+        {"size": "3-15 KG", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    },
+    {
+      "Common Name": "TUNA FISH",
+      "Scientific Name": "TUNA FISH",
+      "Size/Gradec": [
+        {"size": "2-20 KG", "price": null}
+      ],
+      "Availability": "AROUND THE YEAR"
+    }
+  ]
+}

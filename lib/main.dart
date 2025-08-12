@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'firebase_options.dart';
 import 'screens/auth_screen.dart';
@@ -24,33 +25,41 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Admin PriceTrend',
-      theme: AppTheme.theme,
-      initialRoute: '/auth',
-      getPages: [
-        GetPage(
-          name: '/auth',
-          page: () => AuthScreen(),
-          middlewares: [
-            AuthMiddleware(),
-          ],
-        ),
-        GetPage(
-          name: '/dashboard',
-          page: () => DashboardScreen(),
-          middlewares: [
-            AuthMiddleware(),
-          ],
-        ),
-        GetPage(
-          name: '/analytics',
-          page: () => AnalyticsScreen(),
-          middlewares: [
-            AuthMiddleware(),
-          ],
-        ),
-      ],
+    final screenSize = MediaQuery.of(context).size;
+    return ScreenUtilInit(
+      designSize: Size(screenSize.width, screenSize.height),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      ensureScreenSize: true,
+      useInheritedMediaQuery: true,
+      child: GetMaterialApp(
+        title: 'Admin PriceTrend',
+        theme: AppTheme.theme,
+        initialRoute: '/auth',
+        getPages: [
+          GetPage(
+            name: '/auth',
+            page: () => AuthScreen(),
+            middlewares: [
+              AuthMiddleware(),
+            ],
+          ),
+          GetPage(
+            name: '/dashboard',
+            page: () => DashboardScreen(),
+            middlewares: [
+              AuthMiddleware(),
+            ],
+          ),
+          GetPage(
+            name: '/analytics',
+            page: () => AnalyticsScreen(),
+            middlewares: [
+              AuthMiddleware(),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

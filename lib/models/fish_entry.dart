@@ -6,7 +6,7 @@ class FishEntry {
   final FishType fishType;
   final WestBengalState state;
   final double pricePerWeight;
-  final double weight;
+  final double size;
   final DateTime? createdAt;
 
   FishEntry({
@@ -14,7 +14,7 @@ class FishEntry {
     required this.fishType,
     required this.state,
     required this.pricePerWeight,
-    required this.weight,
+    required this.size,
     this.createdAt,
   });
 
@@ -23,7 +23,7 @@ class FishEntry {
       'fishType': fishType.label,
       'state': state.label,
       'pricePerWeight': pricePerWeight,
-      'weight': weight,
+      'weight': size,
       'createdAt': FieldValue.serverTimestamp(),
     };
   }
@@ -40,7 +40,7 @@ class FishEntry {
         orElse: () => WestBengalState.kolkata,
       ),
       pricePerWeight: (json['pricePerWeight'] as num).toDouble(),
-      weight: (json['weight'] as num).toDouble(),
+      size: (json['weight'] as num).toDouble(),
       createdAt: (json['createdAt'] as Timestamp?)?.toDate(),
     );
   }

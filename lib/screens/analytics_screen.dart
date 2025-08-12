@@ -1,11 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
-import '../controllers/analytics_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+
 import '../components/card.dart';
 import '../components/dropdown.dart';
+import '../controllers/analytics_controller.dart';
 import '../theme/app_theme.dart';
-import '../constants/enums.dart';
 import '../widgets/sidebar.dart';
 
 class AnalyticsScreen extends StatelessWidget {
@@ -13,181 +17,310 @@ class AnalyticsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
-      body: Row(
-        children: [
-          Sidebar(),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildHeader(),
-                Expanded(
-                  child: CustomCard(
-                    margin: EdgeInsets.all(24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildFilters(),
-                        SizedBox(height: 24),
-                        Expanded(
-                          child: _buildChart(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        bool isMobile = constraints.maxWidth < 600;
+        return Scaffold(
+          backgroundColor: AppTheme.backgroundColor,
+          drawer: isMobile ? Drawer(child: Sidebar()) : null,
+          appBar: isMobile
+              ? AppBar(
+                  title: Text('Price Analytics'),
+                  backgroundColor: AppTheme.backgroundColor,
+                  iconTheme: IconThemeData(color: AppTheme.primaryColor),
+                  elevation: 0,
+                )
+              : null,
+          body: isMobile
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 16),
+                      _buildFilterSection(),
+                      SizedBox(height: 16),
+                      Expanded(
+                        child: CustomCard(
+                          child: _buildChart(
+                            isMobile: isMobile
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
+                )
+              : Row(
+                  children: [
+                    Sidebar(),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Price Analytics',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 24),
+                            _buildFilterSection(),
+                            SizedBox(height: 24),
+                            Expanded(
+                              child: CustomCard(
+                                child: _buildChart(),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildHeader() {
-    return Container(
-      padding: EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceColor,
-        border: Border(
-          bottom: BorderSide(
-            color: AppTheme.secondaryColor.withOpacity(0.2),
-          ),
-        ),
-      ),
-      child: Text(
-        'Analytics',
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: AppTheme.primaryColor,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFilters() {
+  Widget _buildFilterSection() {
     return Row(
       children: [
-        SizedBox(
-          width: 200,
-          child: CustomDropdown(
-            label: 'Fish Type',
-            value: (controller.selectedFishType.value?.label ?? '').obs,
-            items: ['All', ...FishType.values.map((type) => type.label)],
-            onChanged: (value) {
-              if (value == 'All') {
-                controller.setFishType(null);
-              } else {
-                controller.setFishType(
-                  FishType.values.firstWhere((type) => type.label == value),
-                );
-              }
-            },
-          ),
+        Expanded(
+          child: Obx(() => CustomDropdown(
+                label: 'Species Type',
+                value: controller.selectedSpeciesType.value?.obs,
+                items: controller.speciesTypes,
+                onChanged: controller.loadSpeciesData,
+              )),
         ),
         SizedBox(width: 16),
-        ...TimeFilter.values.map(
-          (filter) => Padding(
-            padding: EdgeInsets.only(right: 8),
-            child: Obx(
-              () => FilterChip(
-                selected: controller.selectedTimeFilter.value == filter,
-                label: Text(filter.label),
-                onSelected: (_) => controller.setTimeFilter(filter),
-                backgroundColor: AppTheme.surfaceColor,
-                selectedColor: AppTheme.primaryColor.withOpacity(0.2),
-                labelStyle: TextStyle(
-                  color: controller.selectedTimeFilter.value == filter
-                      ? AppTheme.primaryColor
-                      : AppTheme.secondaryColor,
-                ),
-              ),
-            ),
-          ),
+        Expanded(
+          child: Obx(() => CustomDropdown(
+                label: 'Species',
+                value: controller.selectedSpecies.value?.obs,
+                items: controller.availableSpecies,
+                onChanged: (value) {
+                  controller.selectedSpecies.value = value;
+                  controller.fetchPriceData();
+                },
+                enabled: controller.selectedSpeciesType.value != null,
+              )),
         ),
       ],
     );
   }
 
-  Widget _buildChart() {
-    return GetBuilder<AnalyticsController>(
-      builder: (controller) {
+  Widget _buildChart({bool isMobile = false}) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Obx(() {
         if (controller.isLoading.value) {
           return Center(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Loading price data...',
+                  style: TextStyle(color: AppTheme.secondaryColor),
+                ),
+              ],
             ),
           );
         }
 
-        final data = controller.getChartData();
-        if (data.isEmpty) {
+        final entries = controller.entries;
+
+        if (entries.isEmpty) {
           return Center(
-            child: Text(
-              'No data available',
-              style: TextStyle(color: AppTheme.secondaryColor),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.show_chart,
+                    size: 48, color: AppTheme.secondaryColor.withOpacity(0.5)),
+                SizedBox(height: 16),
+                Text(
+                  'No price data available for selected species',
+                  style: TextStyle(
+                    color: AppTheme.secondaryColor,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
             ),
           );
         }
+
+        // Calculate min and max values for Y axis
+        final prices = entries.map((e) => e.price).toList();
+        final maxY = prices.reduce(max);
+        final minY = prices.reduce(min);
+        final padding = (maxY - minY) * 0.1;
 
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Chart Header
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Text(
-                controller.getChartTitle(),
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: AppTheme.primaryColor,
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Price Trend',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.primaryColor,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        controller.selectedSpecies.value ?? '',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppTheme.secondaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: AppTheme.primaryColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.timeline,
+                            size: 18, color: AppTheme.primaryColor),
+                        SizedBox(width: 8),
+                        Text(
+                          '${entries.length} Entries',
+                          style: TextStyle(
+                            color: AppTheme.primaryColor,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Price Summary
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      _buildPriceSummaryCard(
+                        'Lowest',
+                        '₹${minY.toStringAsFixed(2)}',
+                        Icons.arrow_downward,
+                        Colors.red,
+                      ),
+                      SizedBox(width: 16),
+                      _buildPriceSummaryCard(
+                        'Average',
+                        '₹${(prices.reduce((a, b) => a + b) / prices.length).toStringAsFixed(2)}',
+                        Icons.equalizer,
+                        Colors.orange,
+                      ),
+                      SizedBox(width: 16),
+                      _buildPriceSummaryCard(
+                        'Highest',
+                        '₹${maxY.toStringAsFixed(2)}',
+                        Icons.arrow_upward,
+                        Colors.green,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
+
+            // Chart
             Expanded(
               child: Padding(
-                padding: EdgeInsets.all(24),
+                padding: const EdgeInsets.only(top: 16.0),
                 child: BarChart(
                   BarChartData(
+                    maxY: maxY + padding,
+                    minY: (minY - padding).clamp(0, double.infinity),
                     alignment: BarChartAlignment.spaceAround,
-                    maxY: data.map((e) => e.maxPrice).reduce((a, b) => a > b ? a : b) * 1.2,
+                    backgroundColor: Colors.white,
                     barTouchData: BarTouchData(
+                      enabled: true,
                       touchTooltipData: BarTouchTooltipData(
-                        tooltipBgColor: AppTheme.surfaceColor,
+                        tooltipBgColor: Colors.white,
+                        tooltipPadding: EdgeInsets.all(16),
                         tooltipRoundedRadius: 8,
-                        tooltipPadding: EdgeInsets.all(12),
                         tooltipMargin: 8,
+                        tooltipBorder: BorderSide(
+                          color: Colors.grey.shade200,
+                          width: 1,
+                        ),
                         getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                          final barData = data[group.x.toInt()];
+                          final entry = entries[group.x.toInt()];
+                          final percentageFromMin =
+                              ((entry.price - minY) / (maxY - minY) * 100)
+                                  .round();
                           return BarTooltipItem(
-                            '${barData.date}\n',
+                            'Date: ${DateFormat('dd MMM yyyy').format(entry.createdAt)}\n',
                             TextStyle(
-                              color: AppTheme.primaryColor,
+                              color: Colors.black87,
                               fontWeight: FontWeight.bold,
+                              fontSize: 14,
                             ),
                             children: [
                               TextSpan(
-                                text: 'Average: ₹${barData.price.toStringAsFixed(2)}\n',
+                                text: '₹${entry.price.toStringAsFixed(2)}\n',
                                 style: TextStyle(
-                                  color: AppTheme.secondaryColor,
-                                  fontWeight: FontWeight.normal,
+                                  color: entry.price == maxY
+                                      ? Colors.green
+                                      : entry.price == minY
+                                          ? Colors.red
+                                          : AppTheme.primaryColor,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                               TextSpan(
-                                text: 'Range: ${controller.getPriceRange(barData)}\n',
+                                text: '$percentageFromMin% from lowest price\n',
                                 style: TextStyle(
-                                  color: AppTheme.secondaryColor,
-                                  fontWeight: FontWeight.normal,
+                                  color: Colors.grey.shade600,
+                                  fontSize: 12,
                                 ),
                               ),
                               TextSpan(
-                                text: 'Entries: ${barData.count}',
+                                text: 'Size: ${entry.sizeGrade}\n',
                                 style: TextStyle(
-                                  color: AppTheme.secondaryColor,
-                                  fontWeight: FontWeight.normal,
+                                  color: Colors.black87,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              TextSpan(
+                                text: 'State: ${entry.state}',
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 12,
                                 ),
                               ),
                             ],
@@ -198,98 +331,225 @@ class AnalyticsScreen extends StatelessWidget {
                     titlesData: FlTitlesData(
                       show: true,
                       bottomTitles: AxisTitles(
+                        axisNameWidget: Padding(
+                          padding: const EdgeInsets.only(top: 16.0),
+                          child: Text(
+                            'Date',
+                            style: TextStyle(
+                              color: AppTheme.secondaryColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
                         sideTitles: SideTitles(
                           showTitles: true,
+                          reservedSize: 50,
+                          interval: max(1, (entries.length / 10).floor().toDouble()),
                           getTitlesWidget: (value, meta) {
-                            if (value < 0 || value >= data.length) return const SizedBox();
+                            if (value < 0 || value >= entries.length) {
+                              return const SizedBox.shrink();
+                            }
                             return Padding(
-                              padding: const EdgeInsets.only(top: 8),
-                              child: Transform.rotate(
-                                angle: controller.selectedTimeFilter.value == TimeFilter.day ? 0 : -0.5,
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: RotatedBox(
+                                quarterTurns: 1,
                                 child: Text(
-                                  data[value.toInt()].date,
+                                  DateFormat('dd MMM').format(entries[value.toInt()].createdAt),
                                   style: TextStyle(
                                     color: AppTheme.secondaryColor,
-                                    fontSize: 12,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
                             );
                           },
-                          reservedSize: controller.selectedTimeFilter.value == TimeFilter.day ? 30 : 50,
                         ),
                       ),
                       leftTitles: AxisTitles(
-                        axisNameWidget: Text(
-                          'Price (₹)',
-                          style: TextStyle(
-                            color: AppTheme.secondaryColor,
-                            fontSize: 12,
-                          ),
-                        ),
+                        // axisNameWidget: Padding(
+                        //   padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
+                        //   child: Text(
+                        //     'Price (₹)',
+                        //     style: TextStyle(
+                        //       color: AppTheme.secondaryColor,
+                        //       fontSize: 12,
+                        //       fontWeight: FontWeight.w500,
+                        //     ),
+                        //   ),
+                        // ),
                         sideTitles: SideTitles(
                           showTitles: true,
-                          reservedSize: 60,
+                          reservedSize: 35,
+                          interval: max(1, (maxY - minY) / 5),
                           getTitlesWidget: (value, meta) {
-                            return Text(
-                              '₹${value.toInt()}',
-                              style: TextStyle(
-                                color: AppTheme.secondaryColor,
-                                fontSize: 12,
+                            return Container(
+                              padding: const EdgeInsets.only(bottom: 8.0, right: 2),
+                              child: Text(
+                                '₹${NumberFormat('#,##0').format(value.toInt())}',
+                                style: TextStyle(
+                                  color: AppTheme.secondaryColor,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                textAlign: TextAlign.right,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             );
                           },
                         ),
                       ),
                       rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      topTitles: AxisTitles(
+                        axisNameWidget: Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: Text(
+                            'Price Trend Over Time',
+                            style: TextStyle(
+                              color: AppTheme.primaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        sideTitles: SideTitles(showTitles: false),
+                      ),
                     ),
                     gridData: FlGridData(
                       show: true,
-                      drawVerticalLine: false,
-                      horizontalInterval: 100,
-                      getDrawingHorizontalLine: (value) => FlLine(
-                        color: AppTheme.secondaryColor.withOpacity(0.1),
-                        strokeWidth: 1,
-                      ),
+                      drawVerticalLine: true,
+                      horizontalInterval: max(1, (maxY - minY) / 5),
+                      verticalInterval: max(1, entries.length / 10),
+                      getDrawingHorizontalLine: (value) {
+                        return FlLine(
+                          color: AppTheme.secondaryColor.withOpacity(0.2),
+                          strokeWidth: 1,
+                          dashArray: [4, 4], // Dotted line
+                        );
+                      },
+                      getDrawingVerticalLine: (value) {
+                        return FlLine(
+                          color: AppTheme.secondaryColor.withOpacity(0.2),
+                          strokeWidth: 1,
+                          dashArray: [4, 4], // Dotted line
+                        );
+                      },
                     ),
                     borderData: FlBorderData(
                       show: true,
-                      border: Border(
-                        bottom: BorderSide(
-                          color: AppTheme.secondaryColor.withOpacity(0.2),
-                        ),
-                        left: BorderSide(
-                          color: AppTheme.secondaryColor.withOpacity(0.2),
-                        ),
+                      border: Border.all(
+                        color: AppTheme.secondaryColor.withOpacity(0.2),
+                        width: 2,
                       ),
                     ),
-                    barGroups: data.asMap().entries.map((entry) {
-                      final barData = entry.value;
+                    barGroups: entries.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final value = entry.value;
+                      final isHighest = value.price == maxY;
+                      final isLowest = value.price == minY;
+
+                      // Responsive bar width based on number of entries
+                      final double width = entries.length > 30
+                          ? 8
+                          : entries.length > 20
+                              ? 12
+                              : 16;
+
                       return BarChartGroupData(
-                        x: entry.key,
+                        x: index,
                         barRods: [
                           BarChartRodData(
-                            toY: barData.price,
-                            color: AppTheme.primaryColor.withOpacity(barData.count > 0 ? 1 : 0.3),
-                            width: 16,
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(6)),
+                            toY: value.price,
+                            gradient: LinearGradient(
+                              colors: isHighest
+                                  ? [
+                                      Colors.green.shade300,
+                                      Colors.green.shade500,
+                                    ]
+                                  : isLowest
+                                      ? [
+                                          Colors.red.shade300,
+                                          Colors.red.shade500,
+                                        ]
+                                      : [
+                                          AppTheme.primaryColor
+                                              .withOpacity(0.7),
+                                          AppTheme.primaryColor,
+                                        ],
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                            ),
+                            width: width,
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(4),
+                              bottom: Radius.circular(1),
+                            ),
                             backDrawRodData: BackgroundBarChartRodData(
                               show: true,
-                              toY: data.map((e) => e.maxPrice).reduce((a, b) => a > b ? a : b) * 1.2,
-                              color: AppTheme.secondaryColor.withOpacity(0.1),
+                              toY: maxY + padding,
+                              color: isHighest
+                                  ? Colors.green.withOpacity(0.05)
+                                  : isLowest
+                                      ? Colors.red.withOpacity(0.05)
+                                      : AppTheme.secondaryColor
+                                          .withOpacity(0.05),
                             ),
                           ),
                         ],
                       );
                     }).toList(),
                   ),
+                  swapAnimationDuration: Duration(milliseconds: 500),
+                  swapAnimationCurve: Curves.easeInOutQuart,
                 ),
               ),
             ),
           ],
         );
-      },
+      }),
+    );
+  }
+
+  Widget _buildPriceSummaryCard(
+      String title, String price, IconData icon, Color color) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: color.withOpacity(0.2),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 16, color: color),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: TextStyle(
+                  color: color,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            price,
+            style: TextStyle(
+              color: color,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

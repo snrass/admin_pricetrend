@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../theme/app_theme.dart';
 
 class CustomDropdown extends StatelessWidget {
   final String label;
-  final RxString value;
+  final RxString? value;
   final List<String> items;
   final Function(String) onChanged;
   final String? Function(String?)? validator;
   final bool searchable;
 
+  final bool enabled;
+
   const CustomDropdown({
     Key? key,
     required this.label,
-    required this.value,
+    this.value,
     required this.items,
     required this.onChanged,
     this.validator,
     this.searchable = false,
+    this.enabled = true,
   }) : super(key: key);
 
   @override
@@ -43,9 +47,9 @@ class CustomDropdown extends StatelessWidget {
               color: AppTheme.secondaryColor.withOpacity(0.2),
             ),
           ),
-          child: Obx(() => searchable
+          child: searchable
               ? _buildSearchableDropdown(context)
-              : _buildSimpleDropdown()),
+              : _buildSimpleDropdown(),
         ),
       ],
     );
@@ -53,20 +57,24 @@ class CustomDropdown extends StatelessWidget {
 
   Widget _buildSimpleDropdown() {
     return DropdownButtonFormField<String>(
-      value: value.value.isEmpty ? null : value.value,
-      items: items.map((item) => DropdownMenuItem(
-        value: item,
-        child: Text(
-          item,
-          style: TextStyle(
-            color: AppTheme.primaryColor,
-            fontSize: 16,
-          ),
-        ),
-      )).toList(),
+      value:
+          value == null || (value?.value.isEmpty == true) ? null : value?.value,
+      items: items
+          .map((item) => DropdownMenuItem(
+                value: item,
+                child: Text(
+                  item,
+                  style: TextStyle(
+                    color: AppTheme.primaryColor,
+                    fontSize: 16,
+                  ),
+                ),
+              ))
+          .toList(),
       onChanged: (val) => onChanged(val ?? ''),
       validator: validator,
       decoration: InputDecoration(
+        enabled: enabled,
         border: InputBorder.none,
         contentPadding: EdgeInsets.symmetric(
           horizontal: 16,
@@ -84,10 +92,12 @@ class CustomDropdown extends StatelessWidget {
 
   Widget _buildSearchableDropdown(BuildContext context) {
     return PopupMenuButton<String>(
-      initialValue: value.value.isEmpty ? null : value.value,
+      enabled: enabled,
+      initialValue:
+          value == null || (value?.value.isEmpty == true) ? null : value?.value,
       onSelected: (val) {
         onChanged(val);
-        value.value = val; // Update the value immediately
+        value?.value = val; // Update the value immediately
       },
       position: PopupMenuPosition.under,
       constraints: BoxConstraints(
@@ -101,9 +111,11 @@ class CustomDropdown extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                value.value.isEmpty ? 'Select ${label.toLowerCase()}' : value.value,
+                value == null || (value?.value.isEmpty == true)
+                    ? 'Select ${label.toLowerCase()}'
+                    : value!.value,
                 style: TextStyle(
-                  color: value.value.isEmpty
+                  color: value == null || (value?.value.isEmpty == true)
                       ? AppTheme.secondaryColor
                       : AppTheme.primaryColor,
                   fontSize: 16,
@@ -126,19 +138,19 @@ class CustomDropdown extends StatelessWidget {
             items: items,
             onSelected: (val) {
               onChanged(val);
-              value.value = val; // Update the value immediately
+              value?.value = val; // Update the value immediately
               Navigator.pop(context); // Close the dropdown
             },
           ),
         ),
         ...items.map((item) => PopupMenuItem(
-          value: item,
-          height: 40,
-          child: Text(
-            item,
-            style: TextStyle(color: AppTheme.primaryColor),
-          ),
-        )),
+              value: item,
+              height: 40,
+              child: Text(
+                item,
+                style: TextStyle(color: AppTheme.primaryColor),
+              ),
+            )),
       ],
     );
   }
